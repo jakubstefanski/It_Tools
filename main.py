@@ -7,7 +7,7 @@ class ApartmentSettlement(BaseModel):
     apartment: str
     settlement_year: int
     settlement_month: int
-    total_bills_pln: float
+    total_bills: float
     total_rent_pln: float
     remaining_amount_pln: float
 
