@@ -100,7 +100,33 @@ class Manager:
         self.transfers = Transfer.from_json_file(self.parameters.transfers_json_path)
         self.bills = Bill.from_json_file(self.parameters.bills_json_path)
 
+class TenantSettlement:
+    tenant: str
+    settlement_year: int
+    settlement_month: int
+    apartament_settlement: str
+    rent_pln: float
+    bills_pln: float
+    total_due: float = 0.0
+    trasnfers_sum: float
+    balance: float = 0.0
+    
+    def __init__(self, **data):
+        if "apartment_settlement" not in data and "apartment" in data:
+            data["apartment_settlement"] = data["apartment"]
 
+        rent = data.get("rent_pln", 0.0)
+        bills = data.get("bills_pln", 0.0)
+        if "total_due_pln" not in data or data["total_due_pln"] == 0.0:
+            data["total_due_pln"] = rent + bills
+
+        transfers = data.get("transfers_sum_pln", 0.0)
+        if "balance_pln" not in data or data["balance_pln"] == 0.0:
+            data["balance_pln"] = transfers - data["total_due_pln"]
+
+        super().__init__(**data) 
+    
+    
 if __name__ == '__main__':
     parameters = Parameters()
     manager = Manager(parameters)
